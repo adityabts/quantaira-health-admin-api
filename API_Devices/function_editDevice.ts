@@ -14,14 +14,34 @@ export default async (request, context) => {
     const authorId = "4AA38157-9B07-4102-846E-C2F04E6B6924";
     const password = "NewPassword@123";
 
-    const params: { serialNumber; deviceName; fdaId; deviceTypeId; manufacturerId; modelNumber; firmwareId; gatewayId; configuration } = parseBody(
-      request.body,
-      ["serialNumber", "deviceName", "fdaId", "deviceTypeId", "manufacturerId", "modelNumber", "firmwareId", "gatewayId", "configuration"]
-    );
-    const { serialNumber, deviceName, fdaId, deviceTypeId, manufacturerId, modelNumber, firmwareId, gatewayId, configuration } = params;
+    const params: {
+      deviceId;
+      serialNumber;
+      deviceName;
+      fdaId;
+      deviceTypeId;
+      manufacturerId;
+      modelNumber;
+      firmwareId;
+      gatewayId;
+      configuration;
+    } = parseBody(request.body, [
+      "deviceId",
+      "serialNumber",
+      "deviceName",
+      "fdaId",
+      "deviceTypeId",
+      "manufacturerId",
+      "modelNumber",
+      "firmwareId",
+      "gatewayId",
+      "configuration",
+    ]);
+    const { deviceId, serialNumber, deviceName, fdaId, deviceTypeId, manufacturerId, modelNumber, firmwareId, gatewayId, configuration } = params;
 
     const parameters: Array<{ name: string; value: string; type: TYPES }> = [];
 
+    parameters.push({ name: "device_id", value: deviceId, type: TYPES.UniqueIdentifier });
     parameters.push({ name: "device_serial_no", value: serialNumber, type: TYPES.NVarChar });
     parameters.push({ name: "device_name", value: deviceName, type: TYPES.NVarChar });
     parameters.push({ name: "fda_device_id", value: fdaId, type: TYPES.NVarChar });
@@ -33,13 +53,17 @@ export default async (request, context) => {
     parameters.push({ name: "value", value: configuration, type: TYPES.NVarChar });
     parameters.push({ name: "configuration_type_id", value: "1", type: TYPES.Int });
 
-    const response = await runProcedure(Procedure._CREATE_DEVICE, parameters);
+    // parameters.push({ name: "LocalMacid", value: macAddress, type: TYPES.NVarChar });
+    // parameters.push({ name: "Ipadd", value: ipAddress, type: TYPES.NVarChar });
+    // parameters.push({ name: "Port", value: port, type: TYPES.NVarChar });
+
+    const response = await runProcedure(Procedure._EDIT_DEVICE, parameters);
 
     console.log("Response from Database", response);
     Respond(context)._201("Device created successfully");
   } catch (error) {
+    context.log.error("################### ERROR IN API_EDIT_DEVICE ################");
     const message = error.message;
-    context.log.error("################### ERROR IN API_NEW_DEVICE ################");
     context.log.error("Error message from database: ", message);
     context.log.error("##########################################################");
     Respond(context)._500("There was a problem with this service execution", message);

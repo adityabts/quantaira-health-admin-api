@@ -39,7 +39,7 @@ export default async (request, context) => {
 
     Respond(context)._201("User updated successfully");
   } catch (error) {
-    context.log.error("################### ERROR IN API_NEW_USER ################");
+    context.log.error("################### ERROR IN API_EDIT_USER ################");
     context.log.error(error);
     context.log.error("##########################################################");
     Respond(context)._500("There was a problem with this service execution", error.message);

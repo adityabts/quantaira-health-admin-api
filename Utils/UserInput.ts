@@ -1,3 +1,5 @@
+// import { isIP } from "validator/es/lib/isIp";
+
 export const isValidUserName = (userName: string) => {
   if (userName === undefined) return false;
   return true;
@@ -9,6 +11,11 @@ export const isValidPassword = (password: string) => {
 };
 
 export const isValidToken = (token) => {
+  return true;
+};
+
+export const isValidIpAddress = (ip) => {
+  // return isIP(ip);
   return true;
 };
 

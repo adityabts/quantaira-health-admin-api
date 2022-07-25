@@ -9,6 +9,7 @@ export enum Procedure {
 
   _GET_DEVICE = "[web].[usp_get_device_details]",
   _GET_USER = "[web].[usp_get_user_details]",
+  _EDIT_DEVICE = "[web].[usp_update_device]",
 
   _LIST_BEDS = "[web].[usp_get_bed]",
   _LIST_USERS = "[web].[usp_get_users]",

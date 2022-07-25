@@ -12,7 +12,6 @@ export default async (request, context) => {
     parameters.push({ name: "user_id", value: userId, type: TYPES.UniqueIdentifier });
 
     const rows = await runProcedure(Procedure._GET_USER, parameters);
-    context.log("USER Details from Data Base", rows);
 
     const users: Array<User> = rows.map((row: any) => {
       const user: User = {

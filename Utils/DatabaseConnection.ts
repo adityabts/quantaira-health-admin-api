@@ -2,7 +2,7 @@ import { Connection, Request, TYPES } from "tedious";
 import { Procedure } from "../Types/Procedure.type";
 
 const config = {
-  server: "192.168.1.100",
+  server: "192.168.1.34",
   authentication: {
     type: "default",
     options: {
@@ -39,10 +39,7 @@ export const generateConnection = async () => {
   });
 };
 
-export const runProcedure = async (
-  procedure: Procedure,
-  parameters?: Array<{ name: string; value: string; type: TYPES }>
-) => {
+export const runProcedure = async (procedure: Procedure, parameters?: Array<{ name: string; value: string; type: TYPES }>) => {
   return new Promise<Array<any>>((resolve, reject) => {
     generateConnection()
       .then((connection: Connection) => {
