@@ -8,7 +8,7 @@ export const config = {
     },
   },
   options: {
-    database: "Quantaira_Device_ChildDB",
+    database: "Quantaira_Device_LocalDB",
     encrypt: true,
     trustServerCertificate: true,
     rowCollectionOnRequestCompletion: true,

@@ -29,6 +29,23 @@ VALUES
 ,<device_name, nvarchar(100),>
 ,<device_guid, uniqueidentifier,>)`;
 
+const listUsers = `SELECT 
+      users.user_guid as id,
+      users.name,
+      users.email,
+      role_name as 'role.name',
+      role_guid as 'role.id',
+      users.isactive as isActive,
+      creater.name as 'createdBy.name',
+      creater.user_guid as 'createdBy.id',
+      users.createddate as 'createdBy.timeStamp'
+      FROM web.users as users
+      LEFT JOIN web.roles as roles
+      ON users.typeofuser =  roles.role_guid
+      LEFT JOIN web.users as creater
+      ON users.createdby = creater.user_guid
+      FOR JSON PATH, INCLUDE_NULL_VALUES, ROOT('users')`;
+
 const createDevice = `INSERT INTO [device].[device] 
     ([device_serial_no]
     ,[fda_device_id]
@@ -53,9 +70,9 @@ const createDevice = `INSERT INTO [device].[device]
     ,@device_name
     ,@device_guid)`;
 
-const listDeviceTypes = "SELECT * FROM [Quantaira_Device_ChildDB].[device].[device_type]";
-const listDeviceModels = "SELECT * FROM [Quantaira_Device_ChildDB].[device].[device_model]";
-const listDeviceFirmware = "SELECT * FROM [Quantaira_Device_ChildDB].[device].[device_firmware]";
+const listDeviceTypes = "SELECT * FROM [Quantaira_Device_LocalDB].[device].[device_type]";
+const listDeviceModels = "SELECT * FROM [Quantaira_Device_LocalDB].[device].[device_model]";
+const listDeviceFirmware = "SELECT * FROM [Quantaira_Device_LocalDB].[device].[device_firmware]";
 const analyticsCounts = `SELECT 
 (SELECT count(*) FROM device.device) as devicesCount,
 (SELECT count(*) FROM web.users ) as usersCount,
@@ -98,6 +115,7 @@ FROM
 `;
 
 export const Queries = {
+  listUsers,
   editDevice,
   createDevice,
   listDevices,

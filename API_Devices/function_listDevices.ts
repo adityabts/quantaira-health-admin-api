@@ -48,6 +48,7 @@ export default async (request, context) => {
         firmware,
         manufacturer,
         model,
+        fdaDeviceId: row.fdaDeviceId,
       };
       return device;
     });

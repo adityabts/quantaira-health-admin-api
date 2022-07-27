@@ -24,7 +24,7 @@ export default async (request, context) => {
     ,[modifiedby]
     ,[modifieddate]
     ,[device_manufacturer_guid]
-    FROM [Quantaira_Device_ChildDB].[device].[device_manufacturer]`;
+    FROM [Quantaira_Device_LocalDB].[device].[device_manufacturer]`;
     const rows = await runQuery(query);
     const manufacturers: Array<Manufacturer> = rows.map((row: any) => {
       const manufacturer: Manufacturer = {

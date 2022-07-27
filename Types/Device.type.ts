@@ -15,4 +15,5 @@ export interface Device extends QuantairaDataItem {
   manufacturer: Manufacturer;
   serialNumber: string;
   model: DeviceModel;
+  fdaDeviceId: string;
 }
