@@ -52,7 +52,7 @@ export default async (request, context) => {
         id: row.deviceId,
         name: row.deviceName,
         gatewayId: "",
-        configuration: row.deviceConfiguration,
+        configuration: JSON.parse(row.deviceConfiguration),
         serialNumber: row.serialNumber,
         type,
         firmware,
@@ -65,7 +65,11 @@ export default async (request, context) => {
     const device = devices[0];
 
     Respond(context)._200({ device });
-  } catch (e) {
-    Respond(context)._500(e.message);
+  } catch (error) {
+    context.log.error("################### ERROR IN API_DEVICE_DETAILS ################");
+    const message = error.message;
+    context.log.error("Error message: ", message);
+    context.log.error("##########################################################");
+    Respond(context)._500(error.message);
   }
 };

@@ -1,8 +1,6 @@
-import { hash } from "bcrypt";
+import { hash } from "bcryptjs";
 
-export const generatePasswordHash = async (
-  password: string
-): Promise<string> => {
+export const generatePasswordHash = async (password: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     hash(password, 10, (err, hash) => {
       if (err) {

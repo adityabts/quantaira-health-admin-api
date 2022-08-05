@@ -10,6 +10,10 @@ export default async (request: any, context: Context) => {
     const users: User = response[0][Object.keys(response[0])[0]];
     Respond(context)._200(users);
   } catch (e) {
+    const message = e.message;
+    context.log.error("################### ERROR IN API_NEW_DEVICE ################");
+    context.log.error("Error message from database: ", message);
+    context.log.error("##########################################################");
     Respond(context)._500("There was a problem while serving your request. PLease try again after sometime!");
   }
 };

@@ -13,6 +13,7 @@
     "@types/bcrypt": "^5.0.0",
     "azure-functions-core-tools": "^3.0.4585",
     "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^8.5.1",
     "tedious": "^14.4.0",
     "uuidv4": "^6.2.13",

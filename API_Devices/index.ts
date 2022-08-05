@@ -5,8 +5,10 @@ import getDeviceDetails from "./function_getDeviceDetails";
 import listDevices from "./function_listDevices";
 import createDevice from "./function_createDevice";
 import editDevice from "./function_editDevice";
+import { validateToken } from "../Utils/Authentication";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
+  if (!validateToken(context, req.headers.authorization)) return;
   if (req.method == "GET") {
     if (req.params && req.params.deviceId !== undefined) {
       await getDeviceDetails(req, context);

@@ -6,6 +6,7 @@ import { runProcedure, runQuery } from "../Utils/DatabaseConnection";
 import { generatePasswordHash } from "../Utils/Encryption";
 import { Queries } from "../Utils/TempQueries";
 import { uuid } from "uuidv4";
+import { config } from "../db.config";
 
 export default async (request, context) => {
   try {
@@ -14,11 +15,56 @@ export default async (request, context) => {
     const authorId = "4AA38157-9B07-4102-846E-C2F04E6B6924";
     const password = "NewPassword@123";
 
-    const params: { serialNumber; deviceName; fdaId; deviceTypeId; manufacturerId; modelNumber; firmwareId; gatewayId; configuration } = parseBody(
-      request.body,
-      ["serialNumber", "deviceName", "fdaId", "deviceTypeId", "manufacturerId", "modelNumber", "firmwareId", "gatewayId", "configuration"]
-    );
-    const { serialNumber, deviceName, fdaId, deviceTypeId, manufacturerId, modelNumber, firmwareId, gatewayId, configuration } = params;
+    const params: {
+      serialNumber;
+      deviceName;
+      fdaId;
+      deviceTypeId;
+      manufacturerId;
+      modelNumber;
+      firmwareId;
+      gatewayId;
+      configuration;
+      ipAddress;
+      macAddress;
+    } = parseBody(request.body, [
+      "serialNumber",
+      "deviceName",
+      "fdaId",
+      "deviceTypeId",
+      "manufacturerId",
+      "modelNumber",
+      "firmwareId",
+      "gatewayId",
+      "configuration",
+      "ipAddress",
+      "macAddress",
+    ]);
+
+    const {
+      serialNumber,
+      deviceName,
+      fdaId,
+      deviceTypeId,
+      manufacturerId,
+      modelNumber,
+      firmwareId,
+      gatewayId,
+      configuration,
+      ipAddress,
+      macAddress,
+    } = params;
+
+    let configurationString;
+    try {
+      const configurationObject = JSON.parse(configuration);
+      configurationObject.ipAddress = ipAddress;
+      configurationObject.macAddress = macAddress;
+      configurationString = JSON.stringify(configurationObject);
+    } catch (e) {
+      const message = "'configuration' is not a valid JSON";
+      throw new Error(message);
+    }
 
     const parameters: Array<{ name: string; value: string; type: TYPES }> = [];
 
@@ -30,7 +76,7 @@ export default async (request, context) => {
     parameters.push({ name: "model_no", value: modelNumber, type: TYPES.UniqueIdentifier });
     parameters.push({ name: "firmware_id", value: firmwareId, type: TYPES.UniqueIdentifier });
     parameters.push({ name: "gateway_main_guid", value: gatewayId, type: TYPES.UniqueIdentifier });
-    parameters.push({ name: "value", value: configuration, type: TYPES.NVarChar });
+    parameters.push({ name: "value", value: configurationString, type: TYPES.NVarChar });
     parameters.push({ name: "configuration_type_id", value: "1", type: TYPES.Int });
 
     const response = await runProcedure(Procedure._CREATE_DEVICE, parameters);

@@ -2,16 +2,16 @@ import { Connection, Request, TYPES } from "tedious";
 import { Procedure } from "../Types/Procedure.type";
 
 const config = {
-  server: "192.168.1.34",
+  server: process.env.DB_SERVER,
   authentication: {
     type: "default",
     options: {
-      userName: "Quantdev", // update me
-      password: "Qu@ntd3v1", // update me
+      userName: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
     },
   },
   options: {
-    database: "Quantaira_Device_LocalDB",
+    database: process.env.DB_NAME,
     encrypt: true,
     trustServerCertificate: true,
     rowCollectionOnRequestCompletion: true,
@@ -26,10 +26,10 @@ export const generateConnection = async () => {
     const dbInstance = new Connection(config);
     dbInstance.connect((error) => {
       if (error) {
-        console.log("Connection Failed!");
+        console.log("Connection Failed!", error);
         reject({
           error: true,
-          data: null,
+          data: error,
           message: "Database connection error",
         });
       } else {

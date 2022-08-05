@@ -12,7 +12,6 @@ export default async (request, context) => {
   try {
     const rows = await runProcedure(Procedure._LIST_DEVICES);
     const devices: Array<Device> = rows.map((row: any) => {
-      console.log("Row", row);
       const type: DeviceType = {
         id: row.deviceTypeId,
         code: row.deviceTypeCode,
@@ -42,7 +41,7 @@ export default async (request, context) => {
         id: row.deviceId,
         name: row.deviceName,
         gatewayId: "",
-        configuration: row.deviceConfiguration,
+        configuration: JSON.parse(row.deviceConfiguration),
         serialNumber: row.serialNumber,
         type,
         firmware,
@@ -53,7 +52,11 @@ export default async (request, context) => {
       return device;
     });
     Respond(context)._200({ devices });
-  } catch (e) {
-    Respond(context)._500(e.message);
+  } catch (error) {
+    context.log.error("################### ERROR IN API_LIST_DEVICE ################");
+    const message = error.message;
+    context.log.error("Error message: ", message);
+    context.log.error("##########################################################");
+    Respond(context)._500(error.message);
   }
 };

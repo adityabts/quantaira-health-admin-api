@@ -25,6 +25,8 @@ export default async (request, context) => {
       firmwareId;
       gatewayId;
       configuration;
+      ipAddress;
+      macAddress;
     } = parseBody(request.body, [
       "deviceId",
       "serialNumber",
@@ -36,8 +38,35 @@ export default async (request, context) => {
       "firmwareId",
       "gatewayId",
       "configuration",
+      "ipAddress",
+      "macAddress",
     ]);
-    const { deviceId, serialNumber, deviceName, fdaId, deviceTypeId, manufacturerId, modelNumber, firmwareId, gatewayId, configuration } = params;
+
+    const {
+      deviceId,
+      serialNumber,
+      deviceName,
+      fdaId,
+      deviceTypeId,
+      manufacturerId,
+      modelNumber,
+      firmwareId,
+      gatewayId,
+      configuration,
+      ipAddress,
+      macAddress,
+    } = params;
+
+    let configurationString;
+    try {
+      const configurationObject = JSON.parse(configuration);
+      configurationObject.ipAddress = ipAddress;
+      configurationObject.macAddress = macAddress;
+      configurationString = JSON.stringify(configurationObject);
+    } catch (e) {
+      const message = "'configuration' is not a valid JSON";
+      throw new Error(message);
+    }
 
     const parameters: Array<{ name: string; value: string; type: TYPES }> = [];
 
@@ -50,7 +79,7 @@ export default async (request, context) => {
     parameters.push({ name: "model_no", value: modelNumber, type: TYPES.UniqueIdentifier });
     parameters.push({ name: "firmware_id", value: firmwareId, type: TYPES.UniqueIdentifier });
     parameters.push({ name: "gateway_main_guid", value: gatewayId, type: TYPES.UniqueIdentifier });
-    parameters.push({ name: "value", value: configuration, type: TYPES.NVarChar });
+    parameters.push({ name: "value", value: configurationString, type: TYPES.NVarChar });
     parameters.push({ name: "configuration_type_id", value: "1", type: TYPES.Int });
 
     // parameters.push({ name: "LocalMacid", value: macAddress, type: TYPES.NVarChar });
@@ -60,7 +89,7 @@ export default async (request, context) => {
     const response = await runProcedure(Procedure._EDIT_DEVICE, parameters);
 
     console.log("Response from Database", response);
-    Respond(context)._201("Device created successfully");
+    Respond(context)._201("Device updated successfully");
   } catch (error) {
     context.log.error("################### ERROR IN API_EDIT_DEVICE ################");
     const message = error.message;

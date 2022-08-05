@@ -31,6 +31,10 @@ export default async (request, context) => {
 
     Respond(context)._200({ user });
   } catch (e) {
+    const message = e.message;
+    context.log.error("################### ERROR IN API_USER_DETAILS ################");
+    context.log.error("Error message from database: ", message);
+    context.log.error("##########################################################");
     Respond(context)._500("There was a problem while serving your request. PLease try again after sometime!");
   }
 };
