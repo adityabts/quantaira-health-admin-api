@@ -41,7 +41,7 @@ export default async (request, context) => {
         id: row.deviceId,
         name: row.deviceName,
         gatewayId: "",
-        configuration: JSON.parse(row.deviceConfiguration),
+        configuration: row.deviceConfiguration,
         serialNumber: row.serialNumber,
         type,
         firmware,
