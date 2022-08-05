@@ -41,7 +41,7 @@ const listUsers = `SELECT
       users.createddate as 'createdBy.timeStamp'
       FROM web.users as users
       LEFT JOIN web.roles as roles
-      ON users.typeofuser =  roles.role_guid
+      ON CAST(users.typeofuser AS uniqueidentifier) =  roles.role_guid
       LEFT JOIN web.users as creater
       ON users.createdby = creater.user_guid
       FOR JSON PATH, INCLUDE_NULL_VALUES, ROOT('users')`;

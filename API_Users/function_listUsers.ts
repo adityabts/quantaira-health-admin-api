@@ -11,7 +11,7 @@ export default async (request: any, context: Context) => {
     Respond(context)._200(users);
   } catch (e) {
     const message = e.message;
-    context.log.error("################### ERROR IN API_NEW_DEVICE ################");
+    context.log.error("################### ERROR IN API_LIST_USERS ################");
     context.log.error("Error message from database: ", message);
     context.log.error("##########################################################");
     Respond(context)._500("There was a problem while serving your request. PLease try again after sometime!");
