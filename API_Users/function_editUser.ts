@@ -28,7 +28,7 @@ export default async (request, context) => {
     parameters.push({ name: "user_id", value: userId, type: TYPES.UniqueIdentifier });
     parameters.push({ name: "user_name", value: name, type: TYPES.NVarChar });
     parameters.push({ name: "email", value: email, type: TYPES.NVarChar });
-    parameters.push({ name: "typeofuser", value: role, type: TYPES.NVarChar });
+    parameters.push({ name: "typeofuser", value: role, type: TYPES.UniqueIdentifier });
     parameters.push({ name: "org_id", value: orgId, type: TYPES.UniqueIdentifier });
     parameters.push({ name: "hospital_id", value: hospitalId, type: TYPES.UniqueIdentifier });
     parameters.push({ name: "permission_ids", value: permissions.length > 0 ? permissions_csv : null, type: TYPES.NVarChar });
