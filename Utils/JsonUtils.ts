@@ -8,3 +8,10 @@ export const isJSON = (str: string) => {
     return false;
   }
 };
+
+export const rowsToJson = (rows) => {
+  return rows.reduce((json, row) => {
+    const key = Object.keys(row)[0];
+    return json + row[key];
+  }, "");
+};
