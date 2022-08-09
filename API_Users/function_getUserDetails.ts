@@ -3,6 +3,7 @@ import { User } from "../Types/User.type";
 import { runProcedure, runQuery } from "../Utils/DatabaseConnection";
 import { Respond } from "../Utils/HttpUtils";
 import { TYPES } from "tedious";
+import { Role } from "../Types/Role.type";
 
 export default async (request, context) => {
   try {
@@ -14,11 +15,16 @@ export default async (request, context) => {
     const rows = await runProcedure(Procedure._GET_USER, parameters);
 
     const users: Array<User> = rows.map((row: any) => {
+      context.log("DB_USERS", rows);
+      const role: Role = {
+        id: row.typeofuser,
+        name: row.role_name,
+      };
       const user: User = {
         id: row.user_guid,
         name: row.name,
         email: row.email,
-        role: row.typeofuser,
+        role,
         permissions: row.permission_ids.split(","),
         beds: row.bed_ids.split(","),
         isActive: row.isactive,
