@@ -2,18 +2,11 @@ import { TYPES } from "tedious";
 import { Respond } from "../Utils/HttpUtils";
 import { parseBody } from "../Utils/UserInput";
 import { Procedure } from "../Types/Procedure.type";
-import { runProcedure, runQuery } from "../Utils/DatabaseConnection";
-import { generatePasswordHash } from "../Utils/Encryption";
-import { Queries } from "../Utils/TempQueries";
-import { uuid } from "uuidv4";
+import { runProcedure } from "../Utils/DatabaseConnection";
 
 export default async (request, context) => {
   try {
-    const orgId = "69674F3B-7652-4CDC-9592-E127FFC5ADBF";
-    const hospitalId = "19E254EC-D65D-43EF-91E0-FE66D5B36878";
-    const authorId = "4AA38157-9B07-4102-846E-C2F04E6B6924";
-    const password = "NewPassword@123";
-
+    const authorId = request.headers.userId;
     const params: {
       deviceId;
       serialNumber;
@@ -82,9 +75,9 @@ export default async (request, context) => {
     parameters.push({ name: "value", value: configurationString, type: TYPES.NVarChar });
     parameters.push({ name: "configuration_type_id", value: "1", type: TYPES.Int });
 
-    // parameters.push({ name: "LocalMacid", value: macAddress, type: TYPES.NVarChar });
-    // parameters.push({ name: "Ipadd", value: ipAddress, type: TYPES.NVarChar });
-    // parameters.push({ name: "Port", value: port, type: TYPES.NVarChar });
+    context.log.warn("### ADD AUTHOR ID TO SP ####");
+    context.log.warn("AUTHOR ID", authorId);
+    context.log.warn("### ADD AUTHOR ID TO SP ####");
 
     const response = await runProcedure(Procedure._EDIT_DEVICE, parameters);
 

@@ -65,6 +65,7 @@ export const runProcedure = async (procedure: Procedure, parameters?: Array<{ na
               })
             );
           }
+          connection.close();
         });
 
         for (const i in parameters) {
@@ -100,6 +101,7 @@ export const runQuery = async (query: string, parameters?: Array<{ name: string;
               })
             );
           }
+          connection.close();
         });
 
         for (const i in parameters) {

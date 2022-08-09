@@ -12,3 +12,9 @@ export interface Address {
   state: string;
   zip: string | number;
 }
+
+export interface AuthObject {
+  userId: string;
+  username: string;
+  iat: number;
+}

@@ -2,14 +2,14 @@ import { TYPES } from "tedious";
 import { Respond } from "../Utils/HttpUtils";
 import { parseBody } from "../Utils/UserInput";
 import { Procedure } from "../Types/Procedure.type";
-import { runProcedure, runQuery } from "../Utils/DatabaseConnection";
+import { runProcedure } from "../Utils/DatabaseConnection";
 import { generatePasswordHash } from "../Utils/Encryption";
 
 export default async (request, context) => {
   try {
+    const authorId = request.headers.userId;
     const orgId = "69674F3B-7652-4CDC-9592-E127FFC5ADBF";
     const hospitalId = "19E254EC-D65D-43EF-91E0-FE66D5B36878";
-    const authorId = "4AA38157-9B07-4102-846E-C2F04E6B6924";
     const password = "NewPassword@123";
 
     const params: { name; email; role; permissions; beds } = parseBody(request.body, ["name", "email", "role", "permissions", "beds"]);

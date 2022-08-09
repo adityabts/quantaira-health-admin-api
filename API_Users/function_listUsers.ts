@@ -8,6 +8,7 @@ import { Queries } from "../Utils/TempQueries";
 export default async (request: any, context: Context) => {
   try {
     const response = await runQuery(Queries.listUsers);
+    context.log("User Response", response);
     const users: User = rowsToJson(response);
     context.log("Users", users);
     Respond(context)._200(users);
