@@ -1,4 +1,3 @@
-import { uuid } from "uuidv4";
 import { TYPES } from "tedious";
 import { Respond } from "../Utils/HttpUtils";
 import { parseBody } from "../Utils/UserInput";
@@ -19,6 +18,16 @@ export default async (request, context) => {
       "beds",
     ]);
     const { userId, name, email, role, permissions, beds } = params;
+
+    if (permissions.length == 0) {
+      Respond(context)._400("User needs to have atleast one permission");
+      return;
+    }
+    if (beds.length == 0) {
+      Respond(context)._400("User needs to have atleast one assigned bed");
+      return;
+    }
+
     const permissions_csv = permissions.toString();
     const beds_csv = beds.toString();
     // const password = "NewPassword@1234";

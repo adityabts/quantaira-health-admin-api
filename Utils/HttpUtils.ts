@@ -72,14 +72,27 @@ export class Response {
     };
   };
 
+  _400 = (response: string) => {
+    this.context.res = {
+      status: 400,
+      body: {
+        error: true,
+        response,
+        message: "Bad Request",
+      },
+      headers: {
+        "content-type": "application/json; charset=utf-8",
+      },
+    };
+  };
+
   _500 = (response: string, errorMessage?: string) => {
     this.context.res = {
       status: 500,
       body: {
         error: true,
         response,
-        message:
-          errorMessage != undefined ? errorMessage : "Internal Server Error",
+        message: errorMessage != undefined ? errorMessage : "Internal Server Error",
       },
     };
   };

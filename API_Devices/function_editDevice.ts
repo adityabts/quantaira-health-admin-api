@@ -74,13 +74,10 @@ export default async (request, context) => {
     parameters.push({ name: "gateway_main_guid", value: gatewayId, type: TYPES.UniqueIdentifier });
     parameters.push({ name: "value", value: configurationString, type: TYPES.NVarChar });
     parameters.push({ name: "configuration_type_id", value: "1", type: TYPES.Int });
-
-    context.log.warn("### ADD AUTHOR ID TO SP ####");
-    context.log.warn("AUTHOR ID", authorId);
-    context.log.warn("### ADD AUTHOR ID TO SP ####");
+    parameters.push({ name: "version", value: "1", type: TYPES.NVarChar });
+    parameters.push({ name: "author_id", value: authorId, type: TYPES.UniqueIdentifier });
 
     const response = await runProcedure(Procedure._EDIT_DEVICE, parameters);
-
     console.log("Response from Database", response);
     Respond(context)._201("Device updated successfully");
   } catch (error) {
